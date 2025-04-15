@@ -3,7 +3,6 @@ package com.ucb.framework.bookDB
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
 
 @Entity(tableName = "book")
 data class BookTable (
@@ -21,14 +20,3 @@ data class BookTable (
     val anio: Int
 )
 
-class Converters {
-    @TypeConverter
-    fun fromList(value: List<String>): String {
-        return value.joinToString(",")
-    }
-
-    @TypeConverter
-    fun toList(value: String): List<String> {
-        return value.split(",").map { it.trim() }
-    }
-}

@@ -3,6 +3,7 @@ package com.ucb.framework.mappers
 import com.ucb.domain.Book
 import com.ucb.domain.Gitalias
 import com.ucb.domain.Movie
+import com.ucb.framework.bookDB.BookTable
 import com.ucb.framework.dto.AvatarResponseDto
 import com.ucb.framework.dto.BookDto
 import com.ucb.framework.dto.MovieDto
@@ -36,6 +37,22 @@ fun MovieDto.toModel(): Movie {
 
 fun BookDto.toModel(): Book {
     return Book(
+        titulo = titulo,
+        autor = autor,
+        anio = anio
+    )
+}
+
+fun BookTable.toModel(): Book {
+    return Book(
+        titulo = titulo,
+        autor = autor,
+        anio = anio
+    )
+}
+
+fun Book.toEntity(): BookTable {
+    return BookTable(
         titulo = titulo,
         autor = autor,
         anio = anio
