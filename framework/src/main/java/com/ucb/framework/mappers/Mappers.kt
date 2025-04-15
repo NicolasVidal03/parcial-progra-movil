@@ -1,8 +1,10 @@
 package com.ucb.framework.mappers
 
+import com.ucb.domain.Book
 import com.ucb.domain.Gitalias
 import com.ucb.domain.Movie
 import com.ucb.framework.dto.AvatarResponseDto
+import com.ucb.framework.dto.BookDto
 import com.ucb.framework.dto.MovieDto
 import com.ucb.framework.persistence.GitAccount
 
@@ -29,5 +31,13 @@ fun MovieDto.toModel(): Movie {
         title = title,
         overview = overview,
         posterPath = posterPath
+    )
+}
+
+fun BookDto.toModel(): Book {
+    return Book(
+        titulo = titulo,
+        autor = autor,
+        anio = anio
     )
 }
