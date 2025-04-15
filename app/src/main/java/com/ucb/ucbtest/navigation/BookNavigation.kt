@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ucb.domain.Movie
+import com.ucb.ucbtest.book.BookUI
 import com.ucb.ucbtest.counter.CounterUI
 import com.ucb.ucbtest.gitalias.GitaliasUI
 import com.ucb.ucbtest.login.LoginUI
@@ -26,19 +27,15 @@ fun BookNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route,
+        startDestination = Screen.BooksScreen.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None }
 
     ) {
-        composable(Screen.MenuScreen.route) {
-            LoginUI(
-                onSuccess = {
-                    navController.navigate(Screen.GitaliasScreen.route)
-                }
-            )
+        composable(Screen.BooksScreen.route) {
+            BookUI()
         }
     }
 }
