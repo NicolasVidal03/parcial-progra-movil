@@ -7,6 +7,7 @@ import com.ucb.domain.Book
 class BookRepository(
     private val remote: IBookRemoteDataSource,
     private val local: IBookLocalDataSource) {
+
     suspend fun findBook(titulo: String): NetworkResult<List<Book>> {
         return this.remote.buscar(titulo)
     }
@@ -18,4 +19,4 @@ class BookRepository(
     suspend fun getLikedBooks(): List<Book> {
         return this.local.getLikedBooks()
     }
-}g
+}
