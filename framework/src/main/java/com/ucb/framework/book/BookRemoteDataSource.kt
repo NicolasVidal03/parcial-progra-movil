@@ -10,7 +10,7 @@ class BookRemoteDataSource(val retrofitService: RetrofitBuilder): IBookRemoteDat
     override suspend fun buscar(titulo: String): NetworkResult<List<Book>> {
         val response = retrofitService.bookService.buscar(titulo)
         if (response.isSuccessful) {
-            return NetworkResult.Success(response.body()!!.result.map { it.toModel() })
+            return NetworkResult.Success(response.body()!!.docs.map { it.toModel() })
         }
         else {
             return NetworkResult.Error(response.message())

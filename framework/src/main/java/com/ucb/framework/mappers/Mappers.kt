@@ -37,9 +37,9 @@ fun MovieDto.toModel(): Movie {
 
 fun BookDto.toModel(): Book {
     return Book(
-        titulo = titulo,
-        autor = autor,
-        anio = anio
+        titulo = title ?: "Sin título",
+        autor = author_name ?: listOf("Autor desconocido"),
+        anio = first_publish_year ?: -1
     )
 }
 
