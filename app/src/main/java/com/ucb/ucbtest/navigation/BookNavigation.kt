@@ -39,7 +39,7 @@ fun BookNavigation() {
             BookUI(navController = navController)
         }
         composable(Screen.LikedBooksScreen.route) {
-            LikedBooksUI(navController = navController)
+            LikedBooksUI(onBackPressed = {navController.popBackStack()})
         }
     }
 }

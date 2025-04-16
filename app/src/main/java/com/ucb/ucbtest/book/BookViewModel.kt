@@ -28,12 +28,14 @@ class BookViewModel @Inject constructor(
 ): ViewModel() {
     sealed class BookState {
         object init: BookState()
-        data class SuccessList(val model: List<Book>): BookState()
-        data class SuccessLike(val message: String): BookState()
+        object Loading: BookState()
         data class Error(val message: String): BookState()
     }
     private val _state = MutableStateFlow<BookState>(BookState.init)
     val state : StateFlow<BookState> = _state
+
+    private val _loading = MutableStateFlow<BookState>(BookState.Loading)
+    val loading: StateFlow<BookState> = _state
 
     private val _libros = MutableStateFlow<List<Book>>(emptyList())
     val libros: StateFlow<List<Book>> = _libros
@@ -45,7 +47,7 @@ class BookViewModel @Inject constructor(
     val librosLike: StateFlow<List<Book>> = _librosLike
 
     fun buscarLibros(titulo: String) {
-        _state.value = BookState.init
+        _state.value = BookState.Loading
         viewModelScope.launch {
             val response = buscar.invoke(titulo)
             when ( val result = response ) {
@@ -53,8 +55,8 @@ class BookViewModel @Inject constructor(
                     _state.value = BookState.Error(result.error)
                 }
                 is NetworkResult.Success -> {
-//                    _state.value = BookState.SuccessList(result.data)
                     _libros.value = result.data
+                    _state.value = BookState.init
                 }
             }
         }

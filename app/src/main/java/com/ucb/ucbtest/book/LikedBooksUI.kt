@@ -7,7 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +28,7 @@ import com.ucb.ucbtest.navigation.Screen
 
 @Composable
 fun LikedBooksUI(
-    navController: NavController,
+    onBackPressed: () -> Unit,
     viewModel: BookViewModel = hiltViewModel()
 ) {
 
@@ -43,6 +47,15 @@ fun LikedBooksUI(
             .padding(16.dp)
             .verticalScroll(scrollState)
     ) {
+            IconButton(
+                onClick = onBackPressed,
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            )
         Text(
             text = "Libros Favoritos",
             modifier = Modifier.padding(bottom = 16.dp),
@@ -75,15 +88,6 @@ fun LikedBooksUI(
                     )
                 }
             }
-        }
-
-        OutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp),
-            onClick = { navController.navigate(Screen.BooksScreen.route) }
-        ) {
-            Text("Volver")
         }
     }
 }

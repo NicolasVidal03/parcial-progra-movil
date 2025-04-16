@@ -33,6 +33,8 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel(), navController: NavControl
     val likeMessage by viewModel.likeMessage.collectAsState()
     val errorState by viewModel.state.collectAsState()
 
+    val loading by viewModel.state.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -169,6 +171,11 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel(), navController: NavControl
                     text = "Error: $errorMessage",
                     color = Color.Red,
                     modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+            if (loading is BookViewModel.BookState.Loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
 
