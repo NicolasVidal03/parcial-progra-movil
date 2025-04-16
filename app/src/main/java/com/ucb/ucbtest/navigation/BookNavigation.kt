@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ucb.domain.Movie
 import com.ucb.ucbtest.book.BookUI
+import com.ucb.ucbtest.book.LikedBooksUI
 import com.ucb.ucbtest.counter.CounterUI
 import com.ucb.ucbtest.gitalias.GitaliasUI
 import com.ucb.ucbtest.login.LoginUI
@@ -35,7 +36,10 @@ fun BookNavigation() {
 
     ) {
         composable(Screen.BooksScreen.route) {
-            BookUI()
+            BookUI(navController = navController)
+        }
+        composable(Screen.LikedBooksScreen.route) {
+            LikedBooksUI(navController = navController)
         }
     }
 }

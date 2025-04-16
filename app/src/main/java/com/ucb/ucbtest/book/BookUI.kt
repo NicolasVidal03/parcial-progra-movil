@@ -19,11 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.ucb.ucbtest.R
+import com.ucb.ucbtest.navigation.Screen
 import kotlinx.coroutines.delay
 
 @Composable
-fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
+fun BookUI(viewModel: BookViewModel = hiltViewModel(), navController: NavController) {
     val scrollState = rememberScrollState()
     var titulo by remember { mutableStateOf("") }
 
@@ -58,7 +60,18 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
                     .padding(top = 8.dp),
                 onClick = { viewModel.buscarLibros(titulo) }
             ) {
-                Text(stringResource(id = R.string.gitalias_btn_find))
+                Text("Buscar libros")
+            }
+
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                onClick = {
+                    navController.navigate(Screen.LikedBooksScreen.route)
+                }
+            ) {
+                Text("Ver lista de favoritos")
             }
 
             // Mensaje de like (si existe)
@@ -110,7 +123,7 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
                                     .fillMaxWidth()
                                     .padding(bottom = 4.dp),
                                 style = TextStyle(
-                                    fontSize = 12.sp,
+                                    fontSize = 15.sp,
                                     fontWeight = FontWeight.Thin
                                 )
                             )
@@ -119,7 +132,7 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
                                 text = "Año: ${libro.anio}",
                                 modifier = Modifier.fillMaxWidth(),
                                 style = TextStyle(
-                                    fontSize = 12.sp,
+                                    fontSize = 15.sp,
                                     fontWeight = FontWeight.Thin
                                 )
                             )
@@ -149,14 +162,6 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
                 }
             }
 
-            OutlinedButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                onClick = { viewModel.getLibros() }
-            ) {
-                Text("Ver lista de favoritos")
-            }
 
             if (errorState is BookViewModel.BookState.Error) {
                 val errorMessage = (errorState as BookViewModel.BookState.Error).message
