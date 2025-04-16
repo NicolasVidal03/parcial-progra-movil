@@ -3,6 +3,7 @@ package com.ucb.ucbtest.book
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ucb.data.NetworkResult
 import com.ucb.domain.Book
 import com.ucb.ucbtest.movie.MovieViewModel.MovieUIState
@@ -40,6 +41,9 @@ class BookViewModel @Inject constructor(
     private val _likeMessage = MutableStateFlow<String?>(null)
     val likeMessage: StateFlow<String?> = _likeMessage
 
+    private val _librosLike = MutableStateFlow<List<Book>>(emptyList())
+    val librosLike: StateFlow<List<Book>> = _librosLike
+
     fun buscarLibros(titulo: String) {
         _state.value = BookState.init
         viewModelScope.launch {
@@ -62,12 +66,27 @@ class BookViewModel @Inject constructor(
 
     fun likeLibro(book: Book) {
         viewModelScope.launch {
-            try {withContext(Dispatchers.IO) {
+            try {
+                withContext(Dispatchers.IO) {
                 likeBook.invoke(book)
                 _likeMessage.value = "Se añadió el libro ${book.titulo} a su colección"
             }
             } catch (e: Exception) {
                 _likeMessage.value = "Error al dar like: ${e.message}"
+            }
+        }
+    }
+
+    fun getLibros() {
+        viewModelScope.launch() {
+            try {
+                withContext(Dispatchers.IO) {
+                    val libros = getLikedBooks.invoke()
+                    _libros.value = libros
+                    _state.value = BookState.init
+                }
+            } catch (e: Exception) {
+                _state.value = BookState.Error("Error al mostrar los libros con like ${e.message}")
             }
         }
     }

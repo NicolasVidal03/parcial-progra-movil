@@ -29,7 +29,7 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
 
     val libros by viewModel.libros.collectAsState()
     val likeMessage by viewModel.likeMessage.collectAsState()
-    val errorState by viewModel.state.collectAsState() // opcional: para errores
+    val errorState by viewModel.state.collectAsState()
 
     Box(
         modifier = Modifier
@@ -149,7 +149,15 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
                 }
             }
 
-            // Mostrar errores si hay
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                onClick = { viewModel.getLibros() }
+            ) {
+                Text("Ver lista de favoritos")
+            }
+
             if (errorState is BookViewModel.BookState.Error) {
                 val errorMessage = (errorState as BookViewModel.BookState.Error).message
                 Text(
@@ -158,6 +166,7 @@ fun BookUI(viewModel: BookViewModel = hiltViewModel()) {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
+
         }
     }
 }
