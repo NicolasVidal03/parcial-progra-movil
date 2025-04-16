@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,33 +35,35 @@ class BookViewModel @Inject constructor(
     private val _state = MutableStateFlow<BookState>(BookState.init)
     val state : StateFlow<BookState> = _state
 
-    private val _loading = MutableStateFlow<BookState>(BookState.Loading)
-    val loading: StateFlow<BookState> = _state
-
     private val _libros = MutableStateFlow<List<Book>>(emptyList())
     val libros: StateFlow<List<Book>> = _libros
 
     private val _likeMessage = MutableStateFlow<String?>(null)
     val likeMessage: StateFlow<String?> = _likeMessage
 
-    private val _librosLike = MutableStateFlow<List<Book>>(emptyList())
-    val librosLike: StateFlow<List<Book>> = _librosLike
-
     fun buscarLibros(titulo: String) {
         _state.value = BookState.Loading
         viewModelScope.launch {
-            val response = buscar.invoke(titulo)
-            when ( val result = response ) {
-                is NetworkResult.Error -> {
-                    _state.value = BookState.Error(result.error)
+            try {
+                val response = buscar.invoke(titulo)
+
+                when (val result = response) {
+                    is NetworkResult.Error -> {
+                        _state.value = BookState.Error(result.error)
+                    }
+                    is NetworkResult.Success -> {
+                        _libros.value = result.data
+                        _state.value = BookState.init
+                    }
                 }
-                is NetworkResult.Success -> {
-                    _libros.value = result.data
-                    _state.value = BookState.init
-                }
+            } catch (e: IOException) {
+                _state.value = BookState.Error("No se pudo conectar a Internet. Verifica tu conexión.")
+            } catch (e: Exception) {
+                _state.value = BookState.Error("Error al buscar libros: ${e.message}")
             }
         }
     }
+
 
     fun clearMessage() {
         _state.value = BookState.init
